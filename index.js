@@ -1,6 +1,25 @@
 const express = require('express')
+const cors = require('cors')
 const app = express()
 app.use(express.json())
+
+
+const corsOptions = {
+    origin: '*',
+}
+
+app.use(cors(corsOptions))
+
+function logMethod(request, response, next) {
+    console.log(request.method)
+    next()
+}
+
+const met = [logMethod]
+
+app.get('/api/persons/info', met, (request, response) => {
+    response.send('User Info')
+})
 
 let list = [
     { 
@@ -82,7 +101,7 @@ app.post('/api/persons', (request, response) => {
 
 //-------------------------------------------------------------------------------------
 
-const PORT = 3001
+const port = process.env.PORT || 3000
 app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
+    console.log(`Server is running on port ${port}`);
 })
